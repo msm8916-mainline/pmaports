@@ -1,5 +1,4 @@
-# Contributor:
-# Maintainer:
+# Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname="libcamera"
 pkgver=0_git20190909
 _commit="5d05418d9b53e1838692f687a6dc373dad45355c"
@@ -8,9 +7,7 @@ pkgdesc="Linux camera framework"
 url="https://libcamera.org/"
 arch="all"
 license="LGPL-2.1-or-later AND GPL-2.0-or-later"
-depends=""
-depends_dev=""
-makedepends="$depends_dev meson linux-headers qt5-qtbase-dev"
+makedepends="meson linux-headers qt5-qtbase-dev"
 subpackages="$pkgname-dev qcam"
 # FIXME
 source="https://example.org/libcamera-$_commit.tar.xz"
@@ -23,7 +20,7 @@ build() {
 		--sysconfdir=/etc \
 		--mandir=/usr/share/man \
 		--localstatedir=/var \
-		--buildtype=release \
+		--buildtype=plain \
 		. output
 	ninja -C output
 }
