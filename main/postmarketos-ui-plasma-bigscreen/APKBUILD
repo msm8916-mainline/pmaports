@@ -1,0 +1,35 @@
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=postmarketos-ui-plasma-bigscreen
+pkgver=0.1
+pkgrel=0
+pkgdesc="(Wayland) 10-feet variant of Plasma, made for big screen TV's"
+url="https://wiki.postmarketos.org/wiki/Plasma_Mobile"
+arch="noarch !armhf" # Crashes on armhf due to https://gitlab.com/postmarketOS/pmaports/issues/75
+license="GPL-3.0-or-later"
+depends="elogind
+	plasma-bigscreen
+	postmarketos-artwork-wallpapers
+	pulseaudio
+	qt5-qtvirtualkeyboard
+	xdg-desktop-portal-kde
+	"
+# Required to launch
+depends="$depends
+	lightdm
+	lightdm-openrc
+	xorg-server
+	"
+install="$pkgname.post-install $pkgname.post-upgrade"
+source="60-lightdm-autologin.conf
+	qtlogging.ini"
+options="!check"
+
+package() {
+	install -Dm644 "$srcdir"/60-lightdm-autologin.conf \
+		"$pkgdir"/usr/share/lightdm/lightdm.conf.d/60-autologin.conf
+
+	install -Dm644 "$srcdir"/qtlogging.ini \
+		"$pkgdir"/etc/xdg/QtProject/qtlogging.ini
+}
+sha512sums="ae056faf3be0040be8b59daa1705231fbc00c63bba95e99acbfe29fa92980b1600616805b96feed27db74f5e10328feabe4a091455e08aa7aeaf0ffb914d376c  60-lightdm-autologin.conf
+341f0b866c315f37868ef3e7137cce8b53a0e8e6164e5af71b3e8e2fa68321afbf0652d76124ef84bade1393f701748852ac939aef9daff7e272a0df827780eb  qtlogging.ini"
