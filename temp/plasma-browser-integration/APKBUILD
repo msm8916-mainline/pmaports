@@ -1,0 +1,31 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=plasma-browser-integration
+pkgver=5.18.90
+pkgrel=0
+pkgdesc="Components necessary to integrate browsers into the Plasma Desktop"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Plasma/Browser_Integration"
+license="GPL-3.0-or-later"
+makedepends="extra-cmake-modules qt5-qtbase-dev kio-dev ki18n-dev kconfig-dev kdbusaddons-dev knotifications-dev krunner-dev kactivities-dev purpose-dev kfilemetadata-dev"
+source="https://download.kde.org/unstable/plasma/$pkgver/plasma-browser-integration-$pkgver.tar.xz"
+subpackages="$pkgname-lang"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --build build --target install
+}
+
+sha512sums="5c2fbd4e7d68d71515529838012c9f9e8f83295192156a01586c015946a0a625bff2bd97f8712b93ac3ab75b0162da5be67f08a64a8965586b079a1c1c951d21  plasma-browser-integration-5.18.90.tar.xz"

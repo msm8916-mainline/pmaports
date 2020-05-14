@@ -1,0 +1,32 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=kde-cli-tools
+pkgver=5.18.90
+pkgrel=0
+pkgdesc="Tools based on KDE Frameworks 5 to better interact with the system"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://cgit.kde.org/kde-cli-tools"
+license="(GPL-2.0-only OR GPL-3.0-only) AND GPL-2.0-or-later AND GPL-2.0-only AND LGPL-2.1-only"
+makedepends="extra-cmake-modules kdoctools-dev qt5-qtbase-dev qt5-qtsvg-dev qt5-qtx11extras-dev kconfig-dev kiconthemes-dev kinit-dev ki18n-dev kcmutils-dev kio-dev kservice-dev kwindowsystem-dev kactivities-dev kdeclarative-dev kdesu-dev plasma-workspace-dev"
+checkdepends="xvfb-run"
+source="https://download.kde.org/unstable/plasma/$pkgver/kde-cli-tools-$pkgver.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+options="!check" # Broken
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --build build --target install
+}
+sha512sums="9e874d2642e7c772b3970d89559a3436ce6675dd3ad857bd34085e10cf941a7af1d40b9f557b1a92805b6ac1905c8f7177af71e5925f3db4379fe2d9645965d5  kde-cli-tools-5.18.90.tar.xz"

@@ -1,0 +1,31 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=ksshaskpass
+pkgver=5.18.90
+pkgrel=0
+pkgdesc="ssh-add helper that uses kwallet and kpassworddialog"
+arch="all !armhf" # armhf blocked by qt5-qtdeclarative
+url="https://www.kde.org/workspaces/plasmadesktop/"
+license="GPL-2.0-or-later"
+makedepends="extra-cmake-modules qt5-qtbase-dev kcoreaddons-dev ki18n-dev kwallet-dev kwidgetsaddons-dev kdoctools-dev"
+source="https://download.kde.org/unstable/plasma/$pkgver/ksshaskpass-$pkgver.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --build build --target install
+}
+
+sha512sums="15629097a4d949f8845be67b940fcabdcf62412bdd72851887766660f84d4079090f78f2273a0f933207239b75369fa8a3a37e80a9f18ab66b065cb91321148f  ksshaskpass-5.18.90.tar.xz"

@@ -1,0 +1,33 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=drkonqi
+pkgver=5.18.90
+pkgrel=0
+pkgdesc="Manages the power consumption settings of a Plasma Shell"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://www.kde.org/workspaces/plasmadesktop/"
+license="GPL-2.0-or-later"
+makedepends="extra-cmake-modules qt5-qtbase-dev qt5-qtx11extras-dev ki18n-dev kcoreaddons-dev kservice-dev kconfigwidgets-dev kjobwidgets-dev kio-dev kcrash-dev kcompletion-dev kxmlrpcclient-dev kwidgetsaddons-dev kwallet-dev knotifications-dev kidletime-dev syntax-highlighting-dev"
+source="https://download.kde.org/unstable/plasma/$pkgver/drkonqi-$pkgver.tar.xz"
+subpackages="$pkgname-lang"
+options="!check" # Broken
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_TESTING=OFF # Broken
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --build build --target install
+}
+
+sha512sums="c9af3acc38b542102416b53365837f7d5a03ba80440185fe591f8309deaa7af28de5a582af058e7aac53dd66c3644a5176286a57648fa9df8fc67b8d34e4afc0  drkonqi-5.18.90.tar.xz"

@@ -1,0 +1,40 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=kdeplasma-addons
+pkgver=5.18.90
+pkgrel=0
+pkgdesc="All kind of addons to improve your Plasma experience"
+# mips, ppc64le and s390x blocked by qt5-qtwebengine
+# armhf blocked by qt5-qtdeclarative
+arch="all !ppc64le !s390x !armhf !mips !mips64"
+url="https://www.kde.org/workspaces/plasmadesktop/"
+license="LGPL-2.0-only AND GPL-2.0-or-later"
+depends="purpose"
+depends_dev="qt5-qtbase-dev qt5-qtdeclarative-dev qt5-qtwebengine-dev karchive-dev
+	kconfig-dev kcoreaddons-dev kdeclarative-dev kholidays-dev ki18n-dev
+	kiconthemes-dev kio-dev kcmutils-dev kross-dev knotifications-dev
+	plasma-framework-dev krunner-dev kservice-dev sonnet-dev kunitconversion-dev
+	kwindowsystem-dev knewstuff-dev"
+makedepends="$depends_dev extra-cmake-modules"
+checkdepends="xvfb-run"
+source="https://download.kde.org/unstable/plasma/$pkgver/kdeplasma-addons-$pkgver.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	# converterrunnertest is broken
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "converterrunnertest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --build build --target install
+}
+sha512sums="7e67f100015be9a3b1d23e969ce7c7b18c2a81ce5fcdb78f274e8f6b09f15f095dc9d44c250ec51b5d4bcfffb4f80970023e5d7a550d966ade4729f3140d8ccd  kdeplasma-addons-5.18.90.tar.xz"

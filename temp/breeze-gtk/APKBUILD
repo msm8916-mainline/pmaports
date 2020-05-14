@@ -1,0 +1,30 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=breeze-gtk
+pkgver=5.18.90
+pkgrel=0
+pkgdesc="A GTK Theme Built to Match KDE's Breeze"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://www.kde.org/workspaces/plasmadesktop/"
+license="LGPL-2.1-only"
+depends="gtk-engines"
+makedepends="extra-cmake-modules sassc breeze-dev breeze py3-cairo"
+source="https://download.kde.org/unstable/plasma/$pkgver/breeze-gtk-$pkgver.tar.xz"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --build build --target install
+}
+sha512sums="c3be9d7a82bba17d29d5527cf11d1c89c8b985a0e7bc432c1be8960aca9e10fa679863288734925ce3ba417918de251450787aa32a168209914e3ed954975a57  breeze-gtk-5.18.90.tar.xz"

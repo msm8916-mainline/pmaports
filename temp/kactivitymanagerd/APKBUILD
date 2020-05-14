@@ -1,0 +1,31 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=kactivitymanagerd
+pkgver=5.18.90
+pkgrel=0
+pkgdesc="System service to manage user's activities and track the usage patterns"
+arch="all !armhf" # disable armhf due to missing qt5-qtdeclarative
+url="https://www.kde.org/workspaces/plasmadesktop/"
+license="GPL-2.0-only OR GPL-3.0-only"
+depends="qt5-qtbase-sqlite"
+makedepends="extra-cmake-modules boost-dev qt5-qtbase-dev kdbusaddons-dev ki18n-dev kconfig-dev kcoreaddons-dev kwindowsystem-dev kglobalaccel-dev kxmlgui-dev kio-dev"
+source="https://download.kde.org/unstable/plasma/$pkgver/kactivitymanagerd-$pkgver.tar.xz"
+subpackages="$pkgname-lang"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --build build --target install
+}
+sha512sums="8e98f329cc26eedc681fe0b8be5d75270258629b2ffe28ca1fef69839f16facc1b41160cf68a1f7ce5c4acda9d4afbeb9686ea2b818788546d708f121cbc5ae9  kactivitymanagerd-5.18.90.tar.xz"

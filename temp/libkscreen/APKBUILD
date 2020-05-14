@@ -1,0 +1,33 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=libkscreen
+pkgver=5.18.90
+pkgrel=0
+pkgdesc="KDE screen management software"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://www.kde.org/workspaces/plasmadesktop/"
+license="LGPL-2.1-or-later AND GPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only)"
+depends_dev="qt5-qtbase-dev qt5-qtx11extras-dev kwayland-dev"
+makedepends="$depends_dev extra-cmake-modules doxygen graphviz qt5-qttools-dev"
+source="https://download.kde.org/unstable/plasma/$pkgver/libkscreen-$pkgver.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc"
+options="!check" # Fails due to requiring dbus-x11 and it running
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --build build --target install
+}
+sha512sums="96909a6b180e9783a7758ad7095be0040db006b43a24807cf290dcccc6f614b0a96f124129ba97a2cbfee7f23b369611fd95eefe39c616a3f552ba6673f3c58b  libkscreen-5.18.90.tar.xz"
