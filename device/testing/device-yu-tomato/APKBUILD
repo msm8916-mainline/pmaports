@@ -2,9 +2,9 @@
 # Maintainer: xeon zolt <xeon.harsh@gmail.com>
 
 pkgname=device-yu-tomato
-pkgdesc="Yureka"
+pkgdesc="YU Yureka"
 pkgver=0.1
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -21,4 +21,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="de02eb4aaebd861d85f83c6d91398509bf92ed92be6ff1eda69957bcfb10789827e81633c569c5bf1d0fcd4521f3410dd3d86787994b994428ee76a65b684916  deviceinfo"
+sha512sums="7178cd4fc07b2e11dc6ee43d33c15fda3cc07aed18729ea213f5c74fef8631211a0c0abac1ece7dc97ef582886d8e9ea84630ff10301bb06c4b1ba9fdd88be79  deviceinfo"
